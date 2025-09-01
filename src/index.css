@@ -1,0 +1,390 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+:root {
+  --radius: 0.75rem;
+  --background: oklch(0.99 0.005 106.423);
+  --foreground: oklch(0.09 0.005 106.423);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.09 0.005 106.423);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.09 0.005 106.423);
+  --primary: oklch(0.47 0.15 258.38);
+  --primary-foreground: oklch(0.98 0.005 106.423);
+  --secondary: oklch(0.96 0.015 106.423);
+  --secondary-foreground: oklch(0.47 0.15 258.38);
+  --muted: oklch(0.96 0.015 106.423);
+  --muted-foreground: oklch(0.45 0.015 106.423);
+  --accent: oklch(0.94 0.025 106.423);
+  --accent-foreground: oklch(0.47 0.15 258.38);
+  --destructive: oklch(0.65 0.2 25.331);
+  --border: oklch(0.9 0.015 106.423);
+  --input: oklch(0.94 0.015 106.423);
+  --ring: oklch(0.47 0.15 258.38);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.47 0.15 258.38);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  /* Blog-specific typography improvements */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif font-bold tracking-tight;
+  }
+  
+  /* Smooth scrolling for blog navigation */
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Focus styles for accessibility */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-ring;
+  }
+  
+  /* Selection styles */
+  ::selection {
+    @apply bg-primary/20 text-primary-foreground;
+  }
+  
+  /* Blog content spacing */
+  .blog-content > * + * {
+    @apply mt-6;
+  }
+  
+  .blog-content h2 + *,
+  .blog-content h3 + *,
+  .blog-content h4 + * {
+    @apply mt-4;
+  }
+  
+  /* Code block improvements */
+  pre {
+    @apply rounded-xl p-4 overflow-x-auto;
+  }
+  
+  code {
+    @apply px-1.5 py-0.5 rounded text-sm bg-muted font-mono;
+  }
+  
+  pre code {
+    @apply p-0 bg-transparent;
+  }
+  
+  /* Image responsiveness */
+  .blog-content img {
+    @apply rounded-xl shadow-lg;
+  }
+  
+  /* Link styles */
+  .blog-content a {
+    @apply text-primary hover:text-primary/80 transition-colors duration-200;
+  }
+  
+  /* Blockquote styling */
+  .blog-content blockquote {
+    @apply border-l-4 border-primary/30 pl-6 italic text-muted-foreground;
+  }
+}
+
+@layer components {
+  /* Auth components */
+  .auth-container {
+    @apply min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-accent/20 to-secondary/30 p-4;
+  }
+  
+  .auth-card {
+    @apply w-full max-w-md bg-card/80 backdrop-blur-sm border border-border/50 rounded-2xl shadow-2xl p-8;
+  }
+  
+  .auth-header {
+    @apply text-center mb-8;
+  }
+  
+  .auth-title {
+    @apply text-3xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent mb-2;
+  }
+  
+  .auth-subtitle {
+    @apply text-lg text-muted-foreground;
+  }
+  
+  .auth-description {
+    @apply text-sm text-muted-foreground mt-2;
+  }
+  
+  .social-button {
+    @apply w-full flex items-center justify-center gap-3 px-4 py-3 border border-border rounded-xl bg-card hover:bg-accent transition-all duration-200 text-sm font-medium;
+  }
+  
+  .social-button:hover {
+    @apply shadow-md transform translate-y-[-1px];
+  }
+  
+  .divider {
+    @apply relative text-center text-sm text-muted-foreground my-6;
+  }
+  
+  .divider::before {
+    @apply absolute inset-0 top-1/2 border-t border-border;
+    content: '';
+  }
+  
+  .divider span {
+    @apply bg-card px-4;
+  }
+  
+  .auth-input {
+    @apply w-full px-4 py-3 border border-border rounded-xl bg-background/50 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-200;
+  }
+  
+  .auth-button {
+    @apply w-full bg-gradient-to-r from-primary to-primary/90 text-primary-foreground font-medium py-3 px-4 rounded-xl hover:shadow-lg hover:scale-[1.02] transition-all duration-200;
+  }
+  
+  .auth-link {
+    @apply text-primary hover:text-primary/80 transition-colors duration-200 font-medium;
+  }
+
+  /* Profile components */
+  .profile-container {
+    @apply max-w-6xl mx-auto p-6 space-y-8;
+  }
+  
+  .profile-header {
+    @apply bg-gradient-to-r from-card via-card/95 to-accent/10 rounded-2xl p-8 border border-border/50 shadow-lg;
+  }
+  
+  .profile-info {
+    @apply flex flex-col lg:flex-row items-start lg:items-center gap-8;
+  }
+  
+  .profile-avatar {
+    @apply relative;
+  }
+  
+  .profile-avatar-image {
+    @apply w-32 h-32 lg:w-40 lg:h-40 rounded-full border-4 border-primary/20 shadow-xl transition-all duration-300 hover:border-primary/40;
+  }
+  
+  .profile-details {
+    @apply flex-1 space-y-4;
+  }
+  
+  .profile-name {
+    @apply text-4xl lg:text-5xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent;
+  }
+  
+  .profile-bio {
+    @apply text-lg text-muted-foreground max-w-2xl leading-relaxed;
+  }
+  
+  .profile-stats {
+    @apply flex flex-wrap gap-6 lg:gap-8 mt-8 pt-6 border-t border-border/50;
+  }
+  
+  .profile-stat {
+    @apply text-center cursor-pointer;
+  }
+  
+  .profile-stat-value {
+    @apply text-2xl lg:text-3xl font-bold text-primary hover:text-primary/80 transition-colors;
+  }
+  
+  .profile-stat-label {
+    @apply text-sm text-muted-foreground hover:text-foreground transition-colors;
+  }
+  
+  .profile-actions {
+    @apply flex flex-col sm:flex-row gap-3;
+  }
+  
+  .profile-edit-btn {
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-3 rounded-xl font-medium transition-all duration-200 hover:shadow-lg hover:scale-[1.02];
+  }
+  
+  .profile-follow-btn {
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary/80 px-6 py-3 rounded-xl font-medium transition-all duration-200 hover:shadow-lg hover:scale-[1.02];
+  }
+  
+  .profile-content {
+    @apply bg-card rounded-2xl p-6 border border-border/50 shadow-lg;
+  }
+  
+  .profile-section-title {
+    @apply text-2xl font-bold mb-6 text-foreground;
+  }
+
+  /* Blog card component */
+  .blog-card {
+    @apply bg-card text-card-foreground rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-6;
+  }
+  
+  /* Blog header component */
+  .blog-header {
+    @apply border-b border-border pb-8 mb-8;
+  }
+  
+  /* Blog meta information */
+  .blog-meta {
+    @apply text-sm text-muted-foreground flex items-center gap-4;
+  }
+  
+  /* Blog tag component */
+  .blog-tag {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors;
+  }
+  
+  /* Blog navigation */
+  .blog-nav {
+    @apply sticky top-0 z-50 bg-background/80 backdrop-blur-sm border-b border-border;
+  }
+  
+  /* Blog sidebar */
+  .blog-sidebar {
+    @apply space-y-6 p-6 bg-card rounded-xl shadow-lg;
+  }
+  
+  /* Blog button variants */
+  .blog-btn-primary {
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-lg font-medium transition-colors duration-200;
+  }
+  
+  .blog-btn-secondary {
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary/80 px-4 py-2 rounded-lg font-medium transition-colors duration-200;
+  }
+  
+  /* Blog search component */
+  .blog-search {
+    @apply w-full px-4 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring;
+  }
+  
+  /* Blog pagination */
+  .blog-pagination {
+    @apply flex items-center justify-center gap-2 mt-8;
+  }
+  
+  .blog-pagination-item {
+    @apply px-3 py-2 rounded-lg border border-border hover:bg-muted transition-colors duration-200;
+  }
+  
+  .blog-pagination-active {
+    @apply bg-primary text-primary-foreground border-primary;
+  }
+}
+
+@layer utilities {
+  /* Blog-specific utilities */
+  .blog-container {
+    @apply max-w-4xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  .blog-prose {
+    @apply max-w-prose mx-auto;
+  }
+  
+  .blog-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
+  }
+  
+  .blog-flex-center {
+    @apply flex items-center justify-center;
+  }
+  
+  .blog-text-gradient {
+    @apply bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent;
+  }
+}
