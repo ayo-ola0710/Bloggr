@@ -3,13 +3,16 @@ import Signin from "./_auth/forms/Signin";
 import Signup from "./_auth/forms/Signup";
 import AuthLayout from "./_auth/AuthLayout";
 import RootLayout from "./_roots/RootLayout";
+import ErrorPage from "./components/shared/ErrorPage";
+import Landing from "./components/shared/Landing";
 import { Explore, Home, Post, Profile, Saved, Users } from "./_roots/pages";
 
 const App = () => {
   return (
     <main>
       <Routes>
-        <Route path="*" element={<div>404</div>} />
+        <Route path="*" element={<ErrorPage />} />
+        <Route path="/" element={<Landing />} />
 
         <Route element={<AuthLayout />}>
           <Route path="/signin" element={<Signin />} />
@@ -17,7 +20,7 @@ const App = () => {
         </Route>
 
         <Route element={<RootLayout />}>
-          <Route path="/" element={<Home />} />
+          <Route path="/Home" element={<Home />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/post" element={<Post />} />
           <Route path="/profile" element={<Profile />} />

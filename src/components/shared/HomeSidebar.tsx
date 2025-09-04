@@ -1,15 +1,6 @@
+import useTheme from "@/hooks/useTheme";
 import { TrendingUp, Clock, Eye, MessageCircle, Bookmark } from "lucide-react";
-
-interface TrendingBlog {
-  id: number;
-  title: string;
-  description: string;
-  author: string;
-  readTime: string;
-  views: number;
-  comments: number;
-  category: string;
-}
+import type { TrendingBlog } from "@/types";
 
 const trendingBlogs: TrendingBlog[] = [
   {
@@ -55,13 +46,28 @@ const trendingBlogs: TrendingBlog[] = [
 ];
 
 const HomeSidebar = () => {
+  const { theme } = useTheme();
   return (
-    <div className="bg-white border-l border-gray-200 h-full overflow-y-auto -pt-3 ">
+    <div
+      className={` border-l border-gray-200 h-full overflow-y-auto -pt-3 ${
+        theme === "light" ? "bg-white" : "bg-gray-900"
+      }`}
+    >
       {/* Header */}
-      <div className="sticky top-0 bg-white border-b border-gray-100 p-6 -mt-3 z-10">
+      <div
+        className={`sticky top-0  border-b border-gray-100 p-6 -mt-3 z-10 ${
+          theme === "light" ? "bg-white" : "bg-gray-900"
+        }`}
+      >
         <div className="flex items-center space-x-2">
           <TrendingUp className="w-6 h-6 text-orange-500" />
-          <h2 className="text-2xl font-bold text-gray-900">Trending</h2>
+          <h2
+            className={`text-2xl font-bold  ${
+              theme === "light" ? "text-gray-900" : "text-white"
+            }`}
+          >
+            Trending
+          </h2>
         </div>
         <p className="text-sm text-gray-500 ">Popular blogs this week</p>
       </div>
@@ -71,7 +77,9 @@ const HomeSidebar = () => {
         {trendingBlogs.map((blog, index) => (
           <div
             key={blog.id}
-            className="group bg-white border border-gray-200 rounded-2xl p-4 hover:shadow-lg hover:border-blue-200 transition-all duration-300 cursor-pointer"
+            className={` ${
+              theme === "light" ? "bg-white" : "bg-gray-900"
+            }group  border border-gray-200 rounded-2xl p-4 hover:shadow-lg hover:border-blue-200 transition-all duration-300 cursor-pointer`}
           >
             {/* Ranking Badge */}
             <div className="flex items-start justify-between mb-3">
@@ -82,7 +90,11 @@ const HomeSidebar = () => {
                   </span>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors duration-200 line-clamp-1">
+                  <h3
+                    className={`text-lg font-semibold ${
+                      theme === "light" ? "text-gray-900" : "text-white"
+                    }  group-hover:text-blue-600 transition-colors duration-200 line-clamp-1`}
+                  >
                     {blog.title}
                   </h3>
                 </div>
@@ -93,7 +105,11 @@ const HomeSidebar = () => {
             </div>
 
             {/* Description */}
-            <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+            <p
+              className={` text-sm mb-3 line-clamp-2 ${
+                theme === "light" ? "text-gray-600" : "text-white"
+              }`}
+            >
               {blog.description}
             </p>
 
@@ -105,7 +121,11 @@ const HomeSidebar = () => {
             </div>
 
             {/* Author and Stats */}
-            <div className="flex items-center justify-between text-xs text-gray-500">
+            <div
+              className={`flex items-center justify-between text-xs  ${
+                theme === "light" ? "text-gray-500" : "text-white"
+              }`}
+            >
               <div className="flex items-center space-x-2">
                 <span className="font-medium">{blog.author}</span>
                 <span>•</span>

@@ -1,5 +1,7 @@
 import HomeSidebar from "@/components/shared/HomeSidebar";
 import BlogCard from "@/components/shared/BlogCard";
+import useTheme from "@/hooks/useTheme";
+
 const data = [
   {
     inital: "JD",
@@ -28,8 +30,13 @@ const data = [
 ];
 
 const Home = () => {
+  const { theme } = useTheme();
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main
+      className={`min-h-screen ${
+        theme === "light" ? "bg-gray-50" : " bg-gray-900"
+      } `}
+    >
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
         {/* Main Content Area */}
         <div className="lg:col-span-2 p-6">
@@ -50,7 +57,7 @@ const Home = () => {
         </div>
 
         {/* Sidebar */}
-        <div className="lg:col-span-1">
+        <div className="lg:col-span-1 hidden md:block">
           <HomeSidebar />
         </div>
       </div>

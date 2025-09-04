@@ -1,4 +1,5 @@
 import UserCard from "@/components/shared/UserCard";
+import useTheme from "@/hooks/useTheme";
 import { Search, Filter, Users as UsersIcon } from "lucide-react";
 
 const users = [
@@ -11,14 +12,23 @@ const users = [
 ];
 
 const Users = () => {
+  const { theme } = useTheme();
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+    <div
+      className={`min-h-screen  py-8 px-4 sm:px-6 lg:px-8 ${
+        theme === "light" ? "bg-gray-50" : "bg-gray-900"
+      }`}
+    >
       {/* Header Section */}
       <div className="max-w-7xl mx-auto mb-8">
         <div className="text-center mb-8">
           <div className="flex items-center justify-center mb-4">
             <UsersIcon className="w-8 h-8 text-blue-600 mr-3" />
-            <h1 className="text-4xl font-bold text-gray-900">
+            <h1
+              className={`text-4xl font-bold ${
+                theme === "light" ? "text-gray-900 " : "text-white"
+              }`}
+            >
               Discover People
             </h1>
           </div>
@@ -35,7 +45,9 @@ const Users = () => {
             <input
               type="text"
               placeholder="Search users..."
-              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200"
+              className={`w-full pl-10 pr-4 py-3 border ${
+                theme === "light" ? "" : "text-white"
+              } border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200`}
             />
           </div>
           <button className="flex items-center justify-center px-6 py-3 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors duration-200">

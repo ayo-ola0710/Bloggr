@@ -1,4 +1,5 @@
 import BlogCard from "@/components/shared/BlogCard";
+import useTheme from "@/hooks/useTheme";
 
 const data = [
   {
@@ -28,8 +29,13 @@ const data = [
 ];
 
 const Saved = () => {
+  const { theme } = useTheme();
   return (
-    <div className="pl-10 pr-20 bg-gray-50 pt-7 pb-7 space-y-8 grid grid-cols-2 gap-6">
+    <div
+      className={`${
+        theme === "light" ? "bg-gray-50" : "bg-gray-900"
+      } md:pl-10 md:pr-20 px-5  pt-7 pb-7 space-y-8 grid grid-cols-1 md:grid-cols-2 gap-6`}
+    >
       {data.map((item, index) => (
         <BlogCard
           key={index}

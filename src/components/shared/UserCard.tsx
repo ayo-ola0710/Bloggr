@@ -1,11 +1,6 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { UserPlus, MessageCircle } from "lucide-react";
-
-interface UserCardProps {
-  intials: string;
-  username: string;
-  bio: string;
-}
+import type { UserCardProps } from "@/types";
 
 const UserCard = ({ intials, username, bio }: UserCardProps) => {
   return (
@@ -20,15 +15,13 @@ const UserCard = ({ intials, username, bio }: UserCardProps) => {
           </Avatar>
           <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-2 border-white"></div>
         </div>
-        
+
         {/* User Info */}
         <div className="text-center space-y-1">
           <h3 className="text-xl font-semibold text-gray-900 capitalize">
-            {username.replace('-', ' ')}
+            {username.replace("-", " ")}
           </h3>
-          <p className="text-sm text-gray-500 capitalize font-medium">
-            {bio}
-          </p>
+          <p className="text-sm text-gray-500 capitalize font-medium">{bio}</p>
         </div>
       </div>
 

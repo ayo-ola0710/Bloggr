@@ -65,9 +65,9 @@ const Profile = () => {
         </div>
 
         {/* Stats */}
-        <div className="profile-stats flex justify-between mx-30">
+        <div className="profile-stats grid grid-cols-2 md:grid-cols-4">
           <div className="profile-stat">
-            <div className="profile-stat-value">
+            <div className="profile-stat-value text-sm md:text-3xl">
               <BookOpen className="w-5 h-5 inline mr-1" />
               42
             </div>
@@ -75,7 +75,7 @@ const Profile = () => {
           </div>
 
           <div className="profile-stat">
-            <div className="profile-stat-value">
+            <div className="profile-stat-value text-sm md:text-3xl">
               <Users className="w-5 h-5 inline mr-1" />
               1.2K
             </div>
@@ -83,7 +83,7 @@ const Profile = () => {
           </div>
 
           <div className="profile-stat">
-            <div className="profile-stat-value">
+            <div className="profile-stat-value text-sm md:text-3xl">
               <Users className="w-5 h-5 inline mr-1" />
               234
             </div>
@@ -91,7 +91,7 @@ const Profile = () => {
           </div>
 
           <div className="profile-stat">
-            <div className="profile-stat-value">
+            <div className="profile-stat-value text-sm md:text-3xl">
               <Heart className="w-5 h-5 inline mr-1" />
               5.8K
             </div>
@@ -102,7 +102,7 @@ const Profile = () => {
 
       <CreatePost />
       {/* Recent Posts Section */}
-      <div className="profile-content">
+      <div className={`profile-content`}>
         <h2 className="profile-section-title">Recent Posts</h2>
         <div className="text-center py-12 text-muted-foreground">
           <BookOpen className="w-16 h-16 mx-auto mb-4 opacity-50" />
