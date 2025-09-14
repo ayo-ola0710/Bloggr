@@ -19,15 +19,24 @@ interface ThemeStyles {
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
+// Get theme from localStorage or default to light
+const getInitialTheme = () => {
+  if (typeof window !== 'undefined') {
+    const savedTheme = localStorage.getItem('theme');
+    return savedTheme || 'light';
+  }
+  return 'light';
+};
+
 const initialState = {
-  theme: "light",
+  theme: getInitialTheme(),
   themeStyles: {
     light: {
       backgroundColor: "#f0f0f0",
       textColor: "#333",
     },
     dark: {
-      backgroundColor: "#333",
+      backgroundColor: "#1a1a1a",
       textColor: "#f0f0f0",
     },
   },
@@ -38,22 +47,17 @@ const reducer = (
   action: { type: string }
 ) => {
   switch (action.type) {
-    case "TOGGLE_THEME":
+    case "TOGGLE_THEME": {
+      const newTheme = state.theme === "light" ? "dark" : "light";
+      // Save to localStorage
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('theme', newTheme);
+      }
       return {
         ...state,
-        theme: state.theme === "light" ? "dark" : "light",
-        themeStyles: {
-          ...state.themeStyles,
-          light:
-            state.theme === "light"
-              ? state.themeStyles.dark
-              : state.themeStyles.light,
-          dark:
-            state.theme === "light"
-              ? state.themeStyles.light
-              : state.themeStyles.dark,
-        },
+        theme: newTheme
       };
+    }
     default:
       return state;
   }

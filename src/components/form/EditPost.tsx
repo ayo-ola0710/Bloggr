@@ -23,7 +23,6 @@ import {
 import { useState } from "react";
 
 const EditPost = ({
-  postId,
   initialData = {
     title: "My Amazing Blog Post",
     content:

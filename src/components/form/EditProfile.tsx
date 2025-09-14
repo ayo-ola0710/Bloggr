@@ -22,15 +22,34 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import useAuth from "@/hooks/useAuth";
+import { toast } from "sonner";
 
 const EditProfile = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { currentUser, UpdateUser } = useAuth();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [fullName, setFullName] = useState(currentUser?.name || "");
+  const [username, setUsername] = useState(currentUser?.username || "");
+  const [bio, setBio] = useState(currentUser?.bio || "");
+  const [location, setLocation] = useState(currentUser?.location || "");
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
-    console.log("Saving profile changes...");
-    setIsOpen(false);
+    if (!currentUser) return;
+
+    try {
+      await UpdateUser(currentUser.id, {
+        name: fullName,
+        username,
+        bio,
+        location,
+      });
+      toast.success("Profile updated successfully!");
+      setIsOpen(false);
+    } catch {
+      toast.error("Failed to update profile.");
+    }
   };
 
   return (
@@ -63,7 +82,11 @@ const EditProfile = () => {
                     alt="Profile"
                   />
                   <AvatarFallback className="text-2xl font-bold bg-gradient-to-br from-primary to-primary/70 text-primary-foreground">
-                    IO
+                    {currentUser?.name
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")
+                      .toUpperCase() || "U"}
                   </AvatarFallback>
                 </Avatar>
                 <div className="absolute inset-0 bg-black/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
@@ -106,7 +129,8 @@ const EditProfile = () => {
                 id="fullName"
                 name="fullName"
                 placeholder="Enter your full name"
-                defaultValue="Israel Olatunle"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
                 className="w-full px-4 py-3 border border-border rounded-xl bg-background/50 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-200"
                 required
               />
@@ -125,7 +149,8 @@ const EditProfile = () => {
                 id="username"
                 name="username"
                 placeholder="Choose a unique username"
-                defaultValue="israelolatunle"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 className="w-full px-4 py-3 border border-border rounded-xl bg-background/50 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-200"
                 required
               />
@@ -144,7 +169,8 @@ const EditProfile = () => {
                 id="bio"
                 name="bio"
                 placeholder="Tell us about yourself, your interests, and what you love to write about..."
-                defaultValue="Passionate blogger and storyteller sharing insights about technology, life, and everything in between. Always learning, always growing."
+                value={bio}
+                onChange={(e) => setBio(e.target.value)}
                 className="w-full px-4 py-3 border border-border rounded-xl bg-background/50 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-200 resize-none min-h-[100px]"
                 rows={4}
               />
@@ -163,7 +189,8 @@ const EditProfile = () => {
                 id="location"
                 name="location"
                 placeholder="Where are you based?"
-                defaultValue="Lagos, Nigeria"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
                 className="w-full px-4 py-3 border border-border rounded-xl bg-background/50 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-200"
               />
             </div>

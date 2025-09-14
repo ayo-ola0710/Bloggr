@@ -1,18 +1,16 @@
 import UserCard from "@/components/shared/UserCard";
 import useTheme from "@/hooks/useTheme";
 import { Search, Filter, Users as UsersIcon } from "lucide-react";
-
-const users = [
-  { intials: "AO", username: "ayo-ola", bio: "content writer" },
-  { intials: "JO", username: "john-oliver", bio: "photographer" },
-  { intials: "SM", username: "sarah-miller", bio: "designer" },
-  { intials: "MJ", username: "mike-johnson", bio: "developer" },
-  { intials: "EW", username: "emma-wilson", bio: "blogger" },
-  { intials: "DL", username: "david-lee", bio: "artist" },
-];
+import useAuth from "@/hooks/useAuth";
+import { useEffect } from "react";
 
 const Users = () => {
   const { theme } = useTheme();
+  const { GetAllUsers, users } = useAuth();
+
+  useEffect(() => {
+    GetAllUsers();
+  }, [GetAllUsers]);
   return (
     <div
       className={`min-h-screen  py-8 px-4 sm:px-6 lg:px-8 ${
@@ -62,8 +60,13 @@ const Users = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {users.map((user, index) => (
             <UserCard
-              key={`${user.username}-${index}`}
-              intials={user.intials}
+              key={`${user.id}-${index}`}
+              id={user.id}
+              intials={user.name
+                .split(" ")
+                .map((n) => n[0])
+                .join("")
+                .toUpperCase()}
               username={user.username}
               bio={user.bio}
             />

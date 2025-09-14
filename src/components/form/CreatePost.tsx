@@ -19,14 +19,32 @@ import {
   Send,
 } from "lucide-react";
 import { useState } from "react";
+import usePost from "@/hooks/usePost";
+import useAuth from "@/hooks/useAuth";
 
 const CreatePost = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { addPost } = usePost();
+  const { currentUser } = useAuth();
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [tags, setTags] = useState("");
+  const [image, setImage] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
-    console.log("Publishing post...");
+    if (!currentUser) return;
+    await addPost({
+      title,
+      content,
+      authorId: currentUser.id,
+      tags: tags ? tags.split(",").map((t) => t.trim()) : undefined,
+      image: image || undefined,
+    });
+    setTitle("");
+    setContent("");
+    setTags("");
+    setImage("");
     setIsOpen(false);
   };
 
@@ -67,7 +85,8 @@ const CreatePost = () => {
               </Label>
               <Input
                 id="title"
-                name="title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
                 placeholder="Enter an engaging title for your post..."
                 className="w-full px-4 py-3 border border-border rounded-xl bg-background/50 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-200"
                 required
@@ -85,7 +104,8 @@ const CreatePost = () => {
               </Label>
               <Textarea
                 id="content"
-                name="content"
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
                 placeholder="Write your post content here. Share your thoughts, experiences, or insights..."
                 className="w-full px-4 py-3 border border-border rounded-xl bg-background/50 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-200 resize-none min-h-[120px]"
                 rows={8}
@@ -104,7 +124,8 @@ const CreatePost = () => {
               </Label>
               <Input
                 id="tags"
-                name="tags"
+                value={tags}
+                onChange={(e) => setTags(e.target.value)}
                 placeholder="e.g. technology, react, webdev (separate with commas)"
                 className="w-full px-4 py-3 border border-border rounded-xl bg-background/50 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-200"
               />
@@ -124,13 +145,13 @@ const CreatePost = () => {
               </Label>
               <Input
                 id="image"
-                name="image"
-                type="file"
-                accept="image/*"
-                className="w-full px-4 py-3 h-20 border border-border rounded-xl bg-background/50 text-foreground file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary file:text-primary-foreground hover:file:bg-primary/90 file:cursor-pointer cursor-pointer transition-all duration-200"
+                value={image}
+                onChange={(e) => setImage(e.target.value)}
+                placeholder="Enter image URL (optional)"
+                className="w-full px-4 py-3 border border-border rounded-xl bg-background/50 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-200"
               />
               <p className="text-xs text-muted-foreground mt-1">
-                Upload a cover image for your post (optional)
+                Enter a URL for the featured image (optional)
               </p>
             </div>
           </div>

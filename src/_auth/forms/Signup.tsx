@@ -13,13 +13,28 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Link } from "react-router-dom";
+import { toast } from "sonner";
+import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Mail, Lock, User, AtSign, FileText } from "lucide-react";
 import { useState } from "react";
+import useAuth from "@/hooks/useAuth";
 
+type FormValues = z.infer<typeof SignUpValidation>;
 const Signup = () => {
+  const { loading, CreateUser } = useAuth();
+  const navigate = useNavigate();
+
   const [showPassword, setShowPassword] = useState(false);
 
+  async function handleSignup(values: FormValues) {
+    try {
+      await CreateUser(values);
+      toast.success("Account created successfully.");
+      navigate("/Home");
+    } catch {
+      toast.error("Failed to create account.");
+    }
+  }
   const form = useForm<z.infer<typeof SignUpValidation>>({
     resolver: zodResolver(SignUpValidation),
     defaultValues: {
@@ -32,9 +47,9 @@ const Signup = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof SignUpValidation>) {
-    console.log(values);
-  }
+  const onSubmit = (data: FormValues) => {
+    handleSignup(data);
+  };
 
   return (
     <div className="auth-container">
@@ -206,12 +221,12 @@ const Signup = () => {
             />
 
             <Button type="submit" className="auth-button">
-              Create Account
+              {loading ? "Loading..." : "Create Account"}
             </Button>
 
             <div className="text-center text-sm text-muted-foreground">
               Already have an account?{" "}
-              <Link to="/Signin" className="auth-link">
+              <Link to="/signin" className="auth-link">
                 Sign in here
               </Link>
             </div>

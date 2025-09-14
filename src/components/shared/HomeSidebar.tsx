@@ -1,52 +1,67 @@
+import { Link } from "react-router-dom";
 import useTheme from "@/hooks/useTheme";
-import { TrendingUp, Clock, Eye, MessageCircle, Bookmark } from "lucide-react";
-import type { TrendingBlog } from "@/types";
+import { TrendingUp } from "lucide-react";
+import { useEffect, useState } from "react";
+import type { Post } from "@/types";
 
-const trendingBlogs: TrendingBlog[] = [
-  {
-    id: 1,
-    title: "Life as a Developer",
-    description: "Essential things every developer should know in 2024",
-    author: "John Doe",
-    readTime: "5 min",
-    views: 1200,
-    comments: 24,
-    category: "Tech",
-  },
-  {
-    id: 2,
-    title: "Modern Web Design",
-    description: "Latest trends and best practices in web design",
-    author: "Sarah Wilson",
-    readTime: "8 min",
-    views: 890,
-    comments: 15,
-    category: "Design",
-  },
-  // {
-  //   id: 3,
-  //   title: "AI Revolution",
-  //   description: "How artificial intelligence is changing our world",
-  //   author: "Mike Chen",
-  //   readTime: "12 min",
-  //   views: 2100,
-  //   comments: 45,
-  //   category: "AI"
-  // },
-  // {
-  //   id: 4,
-  //   title: "Remote Work Tips",
-  //   description: "Productivity hacks for working from home",
-  //   author: "Emma Davis",
-  //   readTime: "6 min",
-  //   views: 756,
-  //   comments: 18,
-  //   category: "Lifestyle"
-  // }
-];
+interface PostWithAuthor extends Post {
+  authorName: string;
+}
 
 const HomeSidebar = () => {
   const { theme } = useTheme();
+  const [trendingPosts, setTrendingPosts] = useState<PostWithAuthor[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTrendingPosts = async () => {
+      try {
+        // Fetch posts
+        const postsResponse = await fetch("http://localhost:8000/posts");
+        if (!postsResponse.ok) throw new Error("Failed to fetch posts");
+        const posts: Post[] = await postsResponse.json();
+
+        // Get random posts for trending
+        const getRandomPosts = (posts: Post[], count: number): Post[] => {
+          if (posts.length <= count) return [...posts];
+          const shuffled = [...posts].sort(() => 0.5 - Math.random());
+          return shuffled.slice(0, count);
+        };
+
+        const randomPosts = getRandomPosts(posts, 2);
+
+        // Fetch users to get author names
+        const usersResponse = await fetch("http://localhost:8000/user");
+        if (!usersResponse.ok) throw new Error("Failed to fetch users");
+        const users = await usersResponse.json();
+
+        const trendingWithAuthors = randomPosts.map((post) => {
+          const author = users.find((user: any) => user.id === post.authorId);
+          return {
+            ...post,
+            authorName: author ? author.name : "Unknown User",
+          };
+        });
+
+        setTrendingPosts(trendingWithAuthors);
+      } catch (error) {
+        console.error("Error fetching trending posts:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTrendingPosts();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-32">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
   return (
     <div
       className={` border-l border-gray-200 h-full overflow-y-auto -pt-3 ${
@@ -74,79 +89,39 @@ const HomeSidebar = () => {
 
       {/* Trending Blogs */}
       <div className="p-6 space-y-4">
-        {trendingBlogs.map((blog, index) => (
-          <div
-            key={blog.id}
-            className={` ${
-              theme === "light" ? "bg-white" : "bg-gray-900"
-            }group  border border-gray-200 rounded-2xl p-4 hover:shadow-lg hover:border-blue-200 transition-all duration-300 cursor-pointer`}
-          >
-            {/* Ranking Badge */}
-            <div className="flex items-start justify-between mb-3">
-              <div className="flex items-center space-x-3">
-                <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-r from-orange-400 to-pink-500 rounded-full flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">
-                    {index + 1}
-                  </span>
+        <div className="space-y-6">
+          <h3 className="text-lg font-semibold dark:text-white">
+            🔥 Trending Now
+          </h3>
+          {trendingPosts.length > 0 ? (
+            trendingPosts.map((post) => (
+              <Link
+                key={post.id}
+                to={`/post/${post.id}`}
+                className={`block p-4 rounded-lg transition-colors ${
+                  theme === "light"
+                    ? "bg-white shadow-sm hover:shadow-md"
+                    : "bg-gray-800 hover:bg-gray-700"
+                }`}
+              >
+                <h4 className="font-medium text-gray-900 dark:text-white">
+                  {post.title}
+                </h4>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 line-clamp-2">
+                  {post.content}
+                </p>
+                <div className="flex items-center justify-between mt-2 text-xs text-gray-400">
+                  <span>{post.authorName}</span>
+                  <span>{Math.ceil(post.content.length / 200)} min read</span>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <h3
-                    className={`text-lg font-semibold ${
-                      theme === "light" ? "text-gray-900" : "text-white"
-                    }  group-hover:text-blue-600 transition-colors duration-200 line-clamp-1`}
-                  >
-                    {blog.title}
-                  </h3>
-                </div>
-              </div>
-              <button className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                <Bookmark className="w-5 h-5 text-gray-400 hover:text-blue-500" />
-              </button>
-            </div>
-
-            {/* Description */}
-            <p
-              className={` text-sm mb-3 line-clamp-2 ${
-                theme === "light" ? "text-gray-600" : "text-white"
-              }`}
-            >
-              {blog.description}
+              </Link>
+            ))
+          ) : (
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              No trending posts to show
             </p>
-
-            {/* Category Badge */}
-            <div className="mb-3">
-              <span className="inline-block px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
-                {blog.category}
-              </span>
-            </div>
-
-            {/* Author and Stats */}
-            <div
-              className={`flex items-center justify-between text-xs  ${
-                theme === "light" ? "text-gray-500" : "text-white"
-              }`}
-            >
-              <div className="flex items-center space-x-2">
-                <span className="font-medium">{blog.author}</span>
-                <span>•</span>
-                <div className="flex items-center space-x-1">
-                  <Clock className="w-3 h-3" />
-                  <span>{blog.readTime}</span>
-                </div>
-              </div>
-              <div className="flex items-center space-x-3">
-                <div className="flex items-center space-x-1">
-                  <Eye className="w-3 h-3" />
-                  <span>{blog.views.toLocaleString()}</span>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <MessageCircle className="w-3 h-3" />
-                  <span>{blog.comments}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
+          )}
+        </div>
       </div>
 
       {/* View All Button */}

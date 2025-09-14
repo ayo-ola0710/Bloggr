@@ -1,10 +1,30 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import CreatePost from "@/components/form/CreatePost";
 import EditProfile from "@/components/form/EditProfile";
-import { Badge } from "@/components/ui/badge";
 import { Calendar, MapPin, Users, Heart, BookOpen } from "lucide-react";
+import useAuth from "@/hooks/useAuth";
 
 const Profile = () => {
+  const { currentUser } = useAuth();
+
+  if (!currentUser) {
+    return (
+      <main className="profile-container">
+        <div className="text-center py-12">
+          <p>Loading profile...</p>
+        </div>
+      </main>
+    );
+  }
+
+  const initials = currentUser.name
+    ? currentUser.name
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase()
+    : currentUser.username?.[0]?.toUpperCase() || "U";
+
   return (
     <main className="profile-container">
       {/* Profile Header */}
@@ -13,21 +33,21 @@ const Profile = () => {
           <div className="profile-avatar">
             <Avatar className="profile-avatar-image w-30 h-30">
               <AvatarImage
-                src="https://github.com/shadcn.png"
-                alt="Israel Olatunle"
+                src={"https://github.com/shadcn.png"}
+                alt={currentUser.name || currentUser.username}
               />
               <AvatarFallback className="text-4xl font-bold bg-gradient-to-br from-primary to-primary/70 text-primary-foreground">
-                IO
+                {initials}
               </AvatarFallback>
             </Avatar>
           </div>
 
           <div className="profile-details">
-            <h1 className="profile-name">Israel Olatunle</h1>
+            <h1 className="profile-name">
+              {currentUser.name || currentUser.username}
+            </h1>
             <p className="profile-bio">
-              Passionate blogger and storyteller sharing insights about
-              technology, life, and everything in between. Always learning,
-              always growing.
+              {currentUser.bio || "No bio available."}
             </p>
 
             {/* Profile Meta */}
@@ -36,26 +56,12 @@ const Profile = () => {
                 <Calendar className="w-4 h-4" />
                 <span>Joined March 2024</span>
               </div>
-              <div className="flex items-center gap-1">
-                <MapPin className="w-4 h-4" />
-                <span>Lagos, Nigeria</span>
-              </div>
-            </div>
-
-            {/* Tags/Interests */}
-            <div className="flex flex-wrap gap-2 mt-4">
-              <Badge variant="secondary" className="text-xs">
-                Technology
-              </Badge>
-              <Badge variant="secondary" className="text-xs">
-                Web Development
-              </Badge>
-              <Badge variant="secondary" className="text-xs">
-                React
-              </Badge>
-              <Badge variant="secondary" className="text-xs">
-                TypeScript
-              </Badge>
+              {currentUser.location && (
+                <div className="flex items-center gap-1">
+                  <MapPin className="w-4 h-4" />
+                  <span>{currentUser.location}</span>
+                </div>
+              )}
             </div>
           </div>
 

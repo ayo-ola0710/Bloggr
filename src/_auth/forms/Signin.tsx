@@ -1,5 +1,3 @@
-"use client";
-
 import { z } from "zod";
 import { cn } from "@/lib/utils";
 import { SignInValidation } from "@/lib/validation";
@@ -15,12 +13,31 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Mail, Lock } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import useAuth from "@/hooks/useAuth";
+import { toast } from "sonner";
+
+type FormValues = z.infer<typeof SignInValidation>;
 
 const Signin = ({ className, ...props }: React.ComponentProps<"div">) => {
+  const { loading, LoginUser, isAuthenticated, error } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      toast.success("Logged in successfully.");
+      navigate("/Home");
+    }
+  }, [isAuthenticated, navigate]);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
 
   const form = useForm<z.infer<typeof SignInValidation>>({
     resolver: zodResolver(SignInValidation),
@@ -30,8 +47,12 @@ const Signin = ({ className, ...props }: React.ComponentProps<"div">) => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof SignInValidation>) {
-    console.log(values);
+  async function handleSignIn(users: FormValues) {
+    await LoginUser(users.email, users.password);
+  }
+
+  function onSubmit(data: FormValues) {
+    handleSignIn(data);
   }
 
   return (
@@ -70,7 +91,7 @@ const Signin = ({ className, ...props }: React.ComponentProps<"div">) => {
                 </svg>
                 Continue with Google
               </button>
-              
+
               <button type="button" className="social-button">
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
                   <path
@@ -121,10 +142,7 @@ const Signin = ({ className, ...props }: React.ComponentProps<"div">) => {
                     <FormLabel className="text-sm font-medium text-foreground">
                       Password
                     </FormLabel>
-                    <Link
-                      to="#"
-                      className="text-xs auth-link hover:underline"
-                    >
+                    <Link to="#" className="text-xs auth-link hover:underline">
                       Forgot password?
                     </Link>
                   </div>
@@ -156,7 +174,7 @@ const Signin = ({ className, ...props }: React.ComponentProps<"div">) => {
             />
 
             <Button type="submit" className="auth-button">
-              Sign In
+              {loading ? "Loading..." : "Sign In"}
             </Button>
 
             <div className="text-center text-sm text-muted-foreground">

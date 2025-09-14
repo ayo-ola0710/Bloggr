@@ -8,7 +8,8 @@ const Sidebar = () => {
   const { theme } = useTheme();
 
   const handleNavigation = (route: string) => {
-    navigate(route);
+    // Use relative path for navigation
+    navigate(route.startsWith('/') ? route : `/${route}`);
   };
 
   return (

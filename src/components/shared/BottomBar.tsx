@@ -6,7 +6,8 @@ const BottomBar = () => {
   const { pathname } = useLocation();
 
   const handleNavigation = (route: string) => {
-    navigate(route);
+    // Use relative path for navigation
+    navigate(route.startsWith('/') ? route : `/${route}`);
   };
 
   return (

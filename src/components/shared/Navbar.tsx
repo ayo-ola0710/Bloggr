@@ -7,14 +7,16 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "../ui/dropdown-menu";
-import { useThemeChange } from "@/hooks/ThemeChange";
 import useTheme from "@/hooks/useTheme";
+import useAuth from "@/hooks/useAuth";
 
 const Navbar = () => {
-  const isAuthenticated = false;
-
-  const themeChangeButtton = useThemeChange();
+  const { isAuthenticated, Logout } = useAuth();
   const { theme } = useTheme();
+
+  function handleLogout() {
+    Logout();
+  }
 
   return (
     <main
@@ -39,7 +41,6 @@ const Navbar = () => {
         </p>
       </div>
       <div className="flex gap-6">
-        {themeChangeButtton}
         <div className="space-x-4 flex">
           {isAuthenticated ? (
             <DropdownMenu>
@@ -55,7 +56,10 @@ const Navbar = () => {
                 </Avatar>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-20">
-                <DropdownMenuItem className="text-xl text-red-600 px-5">
+                <DropdownMenuItem
+                  className="text-xl text-red-600 px-5"
+                  onClick={() => handleLogout()}
+                >
                   Logout
                 </DropdownMenuItem>
               </DropdownMenuContent>
